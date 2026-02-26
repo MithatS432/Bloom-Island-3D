@@ -7,6 +7,9 @@ TagManager:
   - Water
   - Tree
   - Stone
+  - StoneResource
+  - WoodResource
+  - Lake
   layers:
   - Default
   - TransparentFX
