@@ -47,6 +47,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Water Drop
+    uniqueID: 2820893841
+    locked: 0
   m_RenderingLayers:
   - Default
   - Light Layer 1
