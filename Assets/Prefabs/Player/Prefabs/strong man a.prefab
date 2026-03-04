@@ -78,7 +78,7 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
+  m_AnimatePhysics: 1
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
@@ -103,7 +103,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 30
+  Priority: 1
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -202,7 +202,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 630fae0602b762a4eb70287512327986, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 10
+  speed: 8
+  audioSource: {fileID: 7987560283185821860}
+  walkSound: {fileID: 8300000, guid: 623ad07c146cedd4db6b902fd1612618, type: 3}
+  waterWalkSound: {fileID: 8300000, guid: adf4e7fa93007bd49937217a0922f285, type: 3}
+  waterStepEffect: {fileID: 2131232589243201212, guid: 5d71f2d168a866b4fae60f0856d0eee9, type: 3}
 --- !u!114 &4647283666291149533
 MonoBehaviour:
   m_ObjectHideFlags: 0

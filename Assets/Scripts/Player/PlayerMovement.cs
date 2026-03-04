@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -9,46 +10,65 @@ public class PlayerMovement : MonoBehaviour
 
     private CharacterController controller;
     private Animator animator;
-
     private float gravity = -9.81f;
     private float verticalVelocity = 0f;
     private Vector3 targetPosition;
-    private bool isMoving = false;
-
     private Camera mainCamera;
+
+    public AudioSource audioSource;
+    public AudioClip walkSound;
+    public AudioClip waterWalkSound;
+    public GameObject waterStepEffect;
+    private bool isInWater = false;
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        targetPosition = transform.position;
         mainCamera = Camera.main;
+        targetPosition = transform.position;
     }
 
     void Update()
     {
+        HandleInput();
         MovePlayer();
+        CheckWater();
     }
 
-    public void OnClick()
+    void HandleInput()
     {
-        Vector2 screenPos;
+        bool inputReceived = false;
+        Vector2 screenPos = Vector2.zero;
 
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        // Mouse input
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            screenPos = Touchscreen.current.primaryTouch.position.ReadValue();
-        }
-        else
-        {
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+                return;
+
             screenPos = Mouse.current.position.ReadValue();
+            inputReceived = true;
+        }
+        // Touch input
+        else if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+        {
+            int touchId = (int)Touchscreen.current.primaryTouch.touchId.ReadValue();
+
+            if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject(touchId))
+                return;
+
+            screenPos = Touchscreen.current.primaryTouch.position.ReadValue();
+            inputReceived = true;
         }
 
-        Ray ray = mainCamera.ScreenPointToRay(screenPos);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        if (inputReceived)
         {
-            targetPosition = hit.point;
-            isMoving = true;
-            Debug.Log("Hedef: " + targetPosition);
+            Ray ray = mainCamera.ScreenPointToRay(screenPos);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                targetPosition = hit.point;
+            }
         }
     }
 
@@ -60,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (distance < 0.1f)
         {
-            isMoving = false;
             animator.SetFloat("Speed", 0f);
             return;
         }
@@ -80,6 +99,44 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = direction * speed + Vector3.up * verticalVelocity;
         controller.Move(move * Time.deltaTime);
 
-        animator.SetFloat("Speed", speed);
+        animator.SetFloat("Speed", distance > 0.1f ? speed : 0f);
+    }
+
+    public void PlayFootstep()
+    {
+        if (!controller.isGrounded) return;
+
+        if (isInWater)
+        {
+            if (audioSource != null && waterWalkSound != null)
+                audioSource.PlayOneShot(waterWalkSound);
+
+            if (waterStepEffect != null)
+            {
+                GameObject effectInstance = Instantiate(waterStepEffect, transform.position, Quaternion.identity);
+                ParticleSystem ps = effectInstance.GetComponent<ParticleSystem>();
+                if (ps != null)
+                    ps.Play();
+                Destroy(effectInstance, ps.main.duration);
+            }
+        }
+        else
+        {
+            if (audioSource != null && walkSound != null)
+                audioSource.PlayOneShot(walkSound);
+        }
+    }
+
+    void CheckWater()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, 2f))
+        {
+            isInWater = hit.collider.CompareTag("Lake");
+        }
+        else
+        {
+            isInWater = false;
+        }
     }
 }
