@@ -20,6 +20,10 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip waterWalkSound;
     public GameObject waterStepEffect;
     private bool isInWater = false;
+    private float distance;
+
+    public float xRange = 49f;
+    public float zRange = 49f;
 
     void Awake()
     {
@@ -33,7 +37,10 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleInput();
         MovePlayer();
-        CheckWater();
+        if (distance > 0.1f)
+        {
+            CheckWater();
+        }
     }
 
     void HandleInput()
@@ -76,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 direction = targetPosition - transform.position;
         direction.y = 0;
-        float distance = direction.magnitude;
+        distance = direction.magnitude;
 
         if (distance < 0.1f)
         {
@@ -99,9 +106,13 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = direction * speed + Vector3.up * verticalVelocity;
         controller.Move(move * Time.deltaTime);
 
-        animator.SetFloat("Speed", distance > 0.1f ? speed : 0f);
-    }
+        animator.SetFloat("Speed", controller.velocity.magnitude);
 
+        Vector3 pos = transform.position;
+        pos.x = Mathf.Clamp(pos.x, -xRange, xRange);
+        pos.z = Mathf.Clamp(pos.z, -zRange, zRange);
+        transform.position = pos;
+    }
     public void PlayFootstep()
     {
         if (!controller.isGrounded) return;
@@ -117,7 +128,14 @@ public class PlayerMovement : MonoBehaviour
                 ParticleSystem ps = effectInstance.GetComponent<ParticleSystem>();
                 if (ps != null)
                     ps.Play();
-                Destroy(effectInstance, ps.main.duration);
+                if (ps != null)
+                {
+                    Destroy(effectInstance, ps.main.duration);
+                }
+                else
+                {
+                    Destroy(effectInstance, 2f);
+                }
             }
         }
         else

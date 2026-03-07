@@ -16,13 +16,11 @@ public class AudioSliderController : MonoBehaviour
 
     void SetMusicVolume(float value)
     {
-        float dB = Mathf.Lerp(-80f, 0f, value);
-        mixer.SetFloat("MusicVolume", dB);
+        mixer.SetFloat("MusicVolume", Mathf.Log10(value) * 20);
     }
 
     void SetEffectsVolume(float value)
     {
-        float dB = Mathf.Lerp(-80f, 0f, value);
-        mixer.SetFloat("SFXVolume", dB);
+        mixer.SetFloat("SFXVolume", Mathf.Log10(value) * 20);
     }
 }

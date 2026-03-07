@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1356401782610545712}
   - component: {fileID: 77868282747929433}
   - component: {fileID: 1356401782610545713}
-  - component: {fileID: 7987560283185821860}
+  - component: {fileID: 8611197949386609473}
   - component: {fileID: 7168606565907030623}
   - component: {fileID: 4647283666291149533}
   m_Layer: 0
@@ -84,7 +84,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!82 &7987560283185821860
+--- !u!82 &8611197949386609473
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,7 @@ AudioSource:
   m_GameObject: {fileID: 1356401782610545678}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -1570652271197212387, guid: 955fe3ecfca5e1241b46b1d17e8b5e8c, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
-  audioSource: {fileID: 7987560283185821860}
+  audioSource: {fileID: 8611197949386609473}
   walkSound: {fileID: 8300000, guid: 623ad07c146cedd4db6b902fd1612618, type: 3}
   waterWalkSound: {fileID: 8300000, guid: adf4e7fa93007bd49937217a0922f285, type: 3}
   waterStepEffect: {fileID: 2131232589243201212, guid: 5d71f2d168a866b4fae60f0856d0eee9, type: 3}
