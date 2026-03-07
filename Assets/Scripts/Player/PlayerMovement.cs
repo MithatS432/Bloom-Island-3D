@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float xRange = 49f;
     public float zRange = 49f;
 
+
     void Awake()
     {
         controller = GetComponent<CharacterController>();
@@ -41,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
         {
             CheckWater();
         }
+        CheckCollectible();
     }
 
     void HandleInput()
@@ -155,6 +158,18 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             isInWater = false;
+        }
+    }
+    private void CheckCollectible()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, 2f);
+        foreach (var hit in hits)
+        {
+            Collectible collectible = hit.GetComponent<Collectible>();
+            if (collectible != null && !collectible.isCollecting)
+            {
+                collectible.StartCollect(this);
+            }
         }
     }
 }
