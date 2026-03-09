@@ -21,32 +21,33 @@ public class Collectible : MonoBehaviour
     private PlayerMovement player;
     private float lastLoopSoundTime = 0f;
     private float loopSoundInterval = 1f;
-    private float collectRadius = 3f;
+    [SerializeField] private float collectRadius = 3f;
+    [SerializeField] private float distanceTolerance = 0.2f;
 
     void Start()
     {
-        if (collectBarUI != null)
+        if (collectBarUI != null && collectBarUI.gameObject != null)
+        {
             collectBarUI.gameObject.SetActive(false);
+        }
     }
 
     void Update()
     {
-        if (player == null) return;
+        if (!isCollecting || player == null) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (distanceToPlayer <= collectRadius)
+        if (distanceToPlayer <= collectRadius + distanceTolerance)
         {
-            if (!isCollecting)
-            {
-                StartCollect(player);
-            }
-
             collectTimer += Time.deltaTime;
-            if (collectBarUI != null)
+
+            if (collectBarUI != null && collectBarUI.gameObject != null)
             {
-                collectBarUI.gameObject.SetActive(true);
-                collectBarUI.fillAmount = collectTimer / collectDuration;
+                if (!collectBarUI.gameObject.activeSelf)
+                    collectBarUI.gameObject.SetActive(true);
+
+                collectBarUI.fillAmount = Mathf.Clamp01(collectTimer / collectDuration);
             }
 
             if (Time.time - lastLoopSoundTime >= loopSoundInterval)
@@ -62,12 +63,11 @@ public class Collectible : MonoBehaviour
         }
         else
         {
-            if (collectBarUI != null)
+            if (collectBarUI != null && collectBarUI.gameObject != null)
             {
-                collectBarUI.gameObject.SetActive(true);
+                if (!collectBarUI.gameObject.activeSelf)
+                    collectBarUI.gameObject.SetActive(true);
             }
-
-            isCollecting = false;
         }
     }
 
@@ -84,10 +84,11 @@ public class Collectible : MonoBehaviour
 
     public void StartCollect(PlayerMovement playerMovement)
     {
+        if (isCollecting) return;
         player = playerMovement;
         isCollecting = true;
 
-        if (collectBarUI != null)
+        if (collectBarUI != null && collectBarUI.gameObject != null)
         {
             collectBarUI.gameObject.SetActive(true);
             collectBarUI.fillAmount = collectTimer / collectDuration;
@@ -100,7 +101,7 @@ public class Collectible : MonoBehaviour
     {
         isCollecting = false;
 
-        if (collectBarUI != null)
+        if (collectBarUI != null && collectBarUI.gameObject != null)
             collectBarUI.gameObject.SetActive(false);
 
         if (collectEffectPrefab != null)

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 33343903869988276}
   - component: {fileID: 23302719169258506}
   - component: {fileID: 7934909763433855028}
+  - component: {fileID: 5510961192093030041}
   m_Layer: 0
   m_Name: Bush_2
   m_TagString: Tree
@@ -109,3 +110,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.5485506, y: 2.5438507, z: 1.5115123}
   m_Center: {x: 0.011352092, y: 1.2039646, z: -0.09755385}
+--- !u!114 &5510961192093030041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715284614105008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167e46a204650d94698b809b1d70e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  collectDuration: 10
+  collectBarUI: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 59a5450e389c930428fde33db71b0916, type: 3}
+  woodSound: {fileID: 8300000, guid: 01d43487b1b99364a9f1cf4331ba3ad9, type: 3}
+  stoneSound: {fileID: 8300000, guid: 0d4856ef82b4ae34195dcec56720c730, type: 3}
+  collectEffectPrefab: {fileID: 6361997728236094490, guid: fd25cbdb7c54fa4478d443fd2bea4ef1, type: 3}
+  isCollecting: 0
+  collectRadius: 3
+  distanceTolerance: 0.2

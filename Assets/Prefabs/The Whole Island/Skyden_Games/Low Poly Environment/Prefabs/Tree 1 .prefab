@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 6476055355982843725}
   - component: {fileID: 1427944135446658717}
   - component: {fileID: 2155649561114772128}
+  - component: {fileID: 2909868811061523311}
   m_Layer: 0
   m_Name: 'Tree 1 '
   m_TagString: Tree
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 0
   m_IsActive: 1
 --- !u!4 &2191666470857331508
 Transform:
@@ -27,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930026083976683566}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -108,3 +109,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.072111, y: 8.457303, z: 3.810399}
   m_Center: {x: 0.015040994, y: 4.228663, z: -0.10542673}
+--- !u!114 &2909868811061523311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930026083976683566}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167e46a204650d94698b809b1d70e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  collectDuration: 10
+  collectBarUI: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 59a5450e389c930428fde33db71b0916, type: 3}
+  woodSound: {fileID: 8300000, guid: 01d43487b1b99364a9f1cf4331ba3ad9, type: 3}
+  stoneSound: {fileID: 8300000, guid: 0d4856ef82b4ae34195dcec56720c730, type: 3}
+  collectEffectPrefab: {fileID: 6361997728236094490, guid: fd25cbdb7c54fa4478d443fd2bea4ef1, type: 3}
+  isCollecting: 0
+  collectRadius: 3
+  distanceTolerance: 0.2

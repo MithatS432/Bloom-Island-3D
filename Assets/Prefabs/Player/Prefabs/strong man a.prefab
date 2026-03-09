@@ -207,6 +207,11 @@ MonoBehaviour:
   walkSound: {fileID: 8300000, guid: 623ad07c146cedd4db6b902fd1612618, type: 3}
   waterWalkSound: {fileID: 8300000, guid: adf4e7fa93007bd49937217a0922f285, type: 3}
   waterStepEffect: {fileID: 2131232589243201212, guid: 5d71f2d168a866b4fae60f0856d0eee9, type: 3}
+  xRange: 49
+  zRange: 49
+  staminaBar: {fileID: 0}
+  staminaDecreaseRate: 20
+  staminaRecoverRate: 15
 --- !u!114 &4647283666291149533
 MonoBehaviour:
   m_ObjectHideFlags: 0

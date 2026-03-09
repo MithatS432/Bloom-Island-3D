@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7135011562929222495}
   - component: {fileID: 4963055296938477461}
   - component: {fileID: -5643478530900352389}
+  - component: {fileID: 3373391876620523647}
   m_Layer: 0
   m_Name: stone_2
   m_TagString: Stone
@@ -108,3 +109,25 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.725408, y: 0.47105595, z: 0.92888}
   m_Center: {x: 0.010554731, y: 0.23552807, z: -0.02783434}
+--- !u!114 &3373391876620523647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6908711010690672192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167e46a204650d94698b809b1d70e2c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 1
+  collectDuration: 8
+  collectBarUI: {fileID: 0}
+  collectSound: {fileID: 8300000, guid: 59a5450e389c930428fde33db71b0916, type: 3}
+  woodSound: {fileID: 8300000, guid: 01d43487b1b99364a9f1cf4331ba3ad9, type: 3}
+  stoneSound: {fileID: 8300000, guid: 0d4856ef82b4ae34195dcec56720c730, type: 3}
+  collectEffectPrefab: {fileID: 7605971768039713050, guid: cd2a6771c578ec3478980c2e5a5f41ea, type: 3}
+  isCollecting: 0
+  collectRadius: 3
+  distanceTolerance: 0.2

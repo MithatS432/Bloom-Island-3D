@@ -26,6 +26,12 @@ public class PlayerMovement : MonoBehaviour
     public float xRange = 49f;
     public float zRange = 49f;
 
+    public Image staminaBar;
+    private float maxStamina = 200f;
+    private float staminaCount;
+    [SerializeField] private float staminaDecreaseRate = 10f;
+    [SerializeField] private float staminaRecoverRate = 10f;
+
 
     void Awake()
     {
@@ -34,7 +40,10 @@ public class PlayerMovement : MonoBehaviour
         mainCamera = Camera.main;
         targetPosition = transform.position;
     }
-
+    private void Start()
+    {
+        staminaCount = maxStamina;
+    }
     void Update()
     {
         HandleInput();
@@ -88,28 +97,38 @@ public class PlayerMovement : MonoBehaviour
         direction.y = 0;
         distance = direction.magnitude;
 
-        if (distance < 0.1f)
-        {
-            animator.SetFloat("Speed", 0f);
-            return;
-        }
-
-        direction.Normalize();
-        transform.forward = direction;
+        if (direction != Vector3.zero)
+            transform.forward = direction;
 
         if (controller.isGrounded)
-        {
             verticalVelocity = 0f;
+        else
+            verticalVelocity += gravity * Time.deltaTime;
+
+        if (distance > 0.1f && staminaCount > 0f)
+        {
+            staminaCount -= staminaDecreaseRate * Time.deltaTime;
+            if (staminaCount < 0f) staminaCount = 0f;
         }
         else
         {
-            verticalVelocity += gravity * Time.deltaTime;
+            staminaCount += staminaRecoverRate * Time.deltaTime;
+            if (staminaCount > maxStamina) staminaCount = maxStamina;
+        }
+
+        if (staminaCount <= 0f || distance < 0.1f)
+        {
+            animator.SetFloat("Speed", 0f);
+            if (staminaCount <= 0f) return;
         }
 
         Vector3 move = direction * speed + Vector3.up * verticalVelocity;
         controller.Move(move * Time.deltaTime);
 
         animator.SetFloat("Speed", controller.velocity.magnitude);
+
+        if (staminaBar != null)
+            staminaBar.fillAmount = staminaCount / maxStamina;
 
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, -xRange, xRange);
@@ -162,7 +181,7 @@ public class PlayerMovement : MonoBehaviour
     }
     private void CheckCollectible()
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, 2f);
+        Collider[] hits = Physics.OverlapSphere(transform.position, 3f);
         foreach (var hit in hits)
         {
             Collectible collectible = hit.GetComponent<Collectible>();
