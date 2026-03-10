@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -32,7 +33,15 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float staminaDecreaseRate = 10f;
     [SerializeField] private float staminaRecoverRate = 10f;
     private bool canMove = true;
+    public AudioClip tiredSound;
+    public GameObject tiredEffect;
+    [SerializeField] private float effectInterval = 2.5f;
+    private float effectTimer = 0f;
+    private bool isFatigued = false;
 
+    private bool isWaving = false;
+    private float waveTimer = 0f;
+    [SerializeField] private float waveInterval = 5f;
 
     void Awake()
     {
@@ -50,33 +59,85 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (staminaCount <= 0f)
+        if (!isWaving)
         {
+            HandleInput();
+
+            if (canMove)
+            {
+                MovePlayer();
+            }
+        }
+        if (staminaCount <= 0f && !isFatigued)
+        {
+            isFatigued = true;
             canMove = false;
             animator.SetFloat("Speed", 0f);
+            targetPosition = transform.position;
+            effectTimer = 0f;
+        }
 
-            staminaCount += staminaRecoverRate * Time.deltaTime;
-            if (staminaCount > maxStamina)
+        if (isFatigued)
+        {
+            effectTimer -= Time.deltaTime;
+            if (effectTimer <= 0f)
             {
-                staminaCount = maxStamina;
-                canMove = true;
+                PlayTiredEffects();
+                effectTimer = effectInterval;
             }
 
-            if (staminaBar != null)
-                staminaBar.fillAmount = staminaCount / maxStamina;
+            RegenerateStamina();
 
-            return;
+            if (staminaCount >= maxStamina)
+            {
+                staminaCount = maxStamina;
+                isFatigued = false;
+                canMove = true;
+            }
         }
 
-        HandleInput();
-        MovePlayer();
-
-        if (distance > 0.1f)
+        if (!isWaving && distance <= 0.1f)
         {
-            CheckWater();
+            waveTimer += Time.deltaTime;
+            if (waveTimer >= waveInterval)
+            {
+                StartCoroutine(WaveAnimation());
+                waveTimer = 0f;
+            }
         }
-    }
+        else if (distance > 0.1f)
+        {
+            waveTimer = 0f;
+        }
 
+        if (staminaBar != null)
+            staminaBar.fillAmount = staminaCount / maxStamina;
+
+        if (distance > 0.1f) CheckWater();
+    }
+    IEnumerator WaveAnimation()
+    {
+        isWaving = true;
+        animator.SetTrigger("Wave");
+
+        float animLength = animator.GetCurrentAnimatorStateInfo(0).length;
+
+        float timer = 0f;
+        while (timer < animLength)
+        {
+            Vector3 lookDir = mainCamera.transform.position - transform.position;
+            lookDir.y = 0;
+            if (lookDir.sqrMagnitude > 0.001f)
+            {
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(lookDir), Time.deltaTime * 5f);
+            }
+
+            timer += Time.deltaTime;
+            yield return null;
+        }
+
+        isWaving = false;
+    }
     void HandleInput()
     {
         if (!canMove) return;
@@ -121,46 +182,53 @@ public class PlayerMovement : MonoBehaviour
         direction.y = 0;
         distance = direction.magnitude;
 
+        if (controller.isGrounded) verticalVelocity = 0f;
+        else verticalVelocity += gravity * Time.deltaTime;
+
         if (distance > 0.1f)
         {
             direction.Normalize();
             transform.forward = direction;
-        }
-
-        if (controller.isGrounded)
-            verticalVelocity = 0f;
-        else
-            verticalVelocity += gravity * Time.deltaTime;
-
-        if (distance > 0.1f)
-        {
-            staminaCount -= staminaDecreaseRate * Time.deltaTime;
-            if (staminaCount < 0f) staminaCount = 0f;
-        }
-        else
-        {
-            staminaCount += staminaRecoverRate * Time.deltaTime;
-            if (staminaCount > maxStamina) staminaCount = maxStamina;
-        }
-
-        if (distance > 0.1f && staminaCount > 0f)
-        {
             Vector3 move = direction * speed + Vector3.up * verticalVelocity;
             controller.Move(move * Time.deltaTime);
             animator.SetFloat("Speed", controller.velocity.magnitude);
+
+            staminaCount -= staminaDecreaseRate * Time.deltaTime;
         }
         else
         {
             animator.SetFloat("Speed", 0f);
+            RegenerateStamina();
         }
 
-        if (staminaBar != null)
-            staminaBar.fillAmount = staminaCount / maxStamina;
+        staminaCount = Mathf.Clamp(staminaCount, 0f, maxStamina);
 
         Vector3 pos = transform.position;
         pos.x = Mathf.Clamp(pos.x, -xRange, xRange);
         pos.z = Mathf.Clamp(pos.z, -zRange, zRange);
         transform.position = pos;
+    }
+
+    void RegenerateStamina()
+    {
+        if (staminaCount < maxStamina)
+        {
+            staminaCount += staminaRecoverRate * Time.deltaTime;
+        }
+    }
+    void PlayTiredEffects()
+    {
+        if (audioSource != null && tiredSound != null)
+        {
+            audioSource.PlayOneShot(tiredSound);
+        }
+
+        if (tiredEffect != null)
+        {
+            GameObject effect = Instantiate(tiredEffect, transform.position + Vector3.up * 2f, Quaternion.identity);
+            effect.transform.SetParent(this.transform);
+            Destroy(effect, effectInterval);
+        }
     }
 
     public void PlayFootstep()
