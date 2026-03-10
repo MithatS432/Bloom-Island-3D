@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     private float staminaCount;
     [SerializeField] private float staminaDecreaseRate = 10f;
     [SerializeField] private float staminaRecoverRate = 10f;
+    private bool canMove = true;
 
 
     void Awake()
@@ -40,23 +41,46 @@ public class PlayerMovement : MonoBehaviour
         mainCamera = Camera.main;
         targetPosition = transform.position;
     }
+
     private void Start()
     {
         staminaCount = maxStamina;
+        InvokeRepeating(nameof(CheckCollectible), 0f, 0.2f);
     }
+
     void Update()
     {
+        if (staminaCount <= 0f)
+        {
+            canMove = false;
+            animator.SetFloat("Speed", 0f);
+
+            staminaCount += staminaRecoverRate * Time.deltaTime;
+            if (staminaCount > maxStamina)
+            {
+                staminaCount = maxStamina;
+                canMove = true;
+            }
+
+            if (staminaBar != null)
+                staminaBar.fillAmount = staminaCount / maxStamina;
+
+            return;
+        }
+
         HandleInput();
         MovePlayer();
+
         if (distance > 0.1f)
         {
             CheckWater();
         }
-        CheckCollectible();
     }
 
     void HandleInput()
     {
+        if (!canMove) return;
+
         bool inputReceived = false;
         Vector2 screenPos = Vector2.zero;
 
@@ -97,15 +121,18 @@ public class PlayerMovement : MonoBehaviour
         direction.y = 0;
         distance = direction.magnitude;
 
-        if (direction != Vector3.zero)
+        if (distance > 0.1f)
+        {
+            direction.Normalize();
             transform.forward = direction;
+        }
 
         if (controller.isGrounded)
             verticalVelocity = 0f;
         else
             verticalVelocity += gravity * Time.deltaTime;
 
-        if (distance > 0.1f && staminaCount > 0f)
+        if (distance > 0.1f)
         {
             staminaCount -= staminaDecreaseRate * Time.deltaTime;
             if (staminaCount < 0f) staminaCount = 0f;
@@ -116,16 +143,16 @@ public class PlayerMovement : MonoBehaviour
             if (staminaCount > maxStamina) staminaCount = maxStamina;
         }
 
-        if (staminaCount <= 0f || distance < 0.1f)
+        if (distance > 0.1f && staminaCount > 0f)
+        {
+            Vector3 move = direction * speed + Vector3.up * verticalVelocity;
+            controller.Move(move * Time.deltaTime);
+            animator.SetFloat("Speed", controller.velocity.magnitude);
+        }
+        else
         {
             animator.SetFloat("Speed", 0f);
-            if (staminaCount <= 0f) return;
         }
-
-        Vector3 move = direction * speed + Vector3.up * verticalVelocity;
-        controller.Move(move * Time.deltaTime);
-
-        animator.SetFloat("Speed", controller.velocity.magnitude);
 
         if (staminaBar != null)
             staminaBar.fillAmount = staminaCount / maxStamina;
@@ -135,9 +162,10 @@ public class PlayerMovement : MonoBehaviour
         pos.z = Mathf.Clamp(pos.z, -zRange, zRange);
         transform.position = pos;
     }
+
     public void PlayFootstep()
     {
-        if (!controller.isGrounded) return;
+        if (!controller.isGrounded || !canMove) return;
 
         if (isInWater)
         {
@@ -179,6 +207,7 @@ public class PlayerMovement : MonoBehaviour
             isInWater = false;
         }
     }
+
     private void CheckCollectible()
     {
         Collider[] hits = Physics.OverlapSphere(transform.position, 3f);

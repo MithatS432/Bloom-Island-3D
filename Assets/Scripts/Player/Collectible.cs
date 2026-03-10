@@ -40,7 +40,7 @@ public class Collectible : MonoBehaviour
 
         if (distanceToPlayer <= collectRadius + distanceTolerance)
         {
-            collectTimer += Time.deltaTime;
+            collectTimer = Mathf.Clamp(collectTimer + Time.deltaTime, 0, collectDuration);
 
             if (collectBarUI != null && collectBarUI.gameObject != null)
             {
@@ -63,10 +63,12 @@ public class Collectible : MonoBehaviour
         }
         else
         {
+            isCollecting = false;
+            player = null;
+
             if (collectBarUI != null && collectBarUI.gameObject != null)
             {
-                if (!collectBarUI.gameObject.activeSelf)
-                    collectBarUI.gameObject.SetActive(true);
+                collectBarUI.gameObject.SetActive(false);
             }
         }
     }
