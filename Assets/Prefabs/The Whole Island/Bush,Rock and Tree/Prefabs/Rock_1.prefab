@@ -131,3 +131,5 @@ MonoBehaviour:
   isCollecting: 0
   collectRadius: 3
   distanceTolerance: 0.2
+  respawnTime: 12
+  collectAmount: 10

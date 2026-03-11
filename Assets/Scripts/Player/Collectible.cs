@@ -28,8 +28,9 @@ public class Collectible : MonoBehaviour
     [SerializeField] private float respawnTime = 20f;
     private Vector3 originalPosition;
     private Quaternion originalRotation;
-
     private GameObject meshObject;
+
+    public int collectAmount;
 
     private void Awake()
     {
@@ -102,12 +103,11 @@ public class Collectible : MonoBehaviour
 
         player = playerMovement;
         isCollecting = true;
-        collectTimer = 0f;
 
         if (collectBarUI != null)
         {
             collectBarUI.gameObject.SetActive(true);
-            collectBarUI.fillAmount = 0f;
+            collectBarUI.fillAmount = collectTimer / collectDuration;
         }
 
         lastLoopSoundTime = Time.time - loopSoundInterval;
@@ -117,7 +117,6 @@ public class Collectible : MonoBehaviour
     {
         isCollecting = false;
         player = null;
-        collectTimer = 0f;
 
         if (collectBarUI != null)
         {
@@ -144,6 +143,11 @@ public class Collectible : MonoBehaviour
         if (player != null && player.audioSource != null && collectSound != null)
             player.audioSource.PlayOneShot(collectSound);
 
+        if (player != null)
+            player.UpdateCollectibleUI(this, collectAmount);
+
+        if (MissionManager.Instance != null)
+            MissionManager.Instance.ReportCollect(type, collectAmount);
 
         player = null;
         collectTimer = 0f;

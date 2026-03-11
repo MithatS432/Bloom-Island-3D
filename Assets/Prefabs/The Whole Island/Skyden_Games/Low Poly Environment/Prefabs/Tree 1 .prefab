@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  collectDuration: 10
+  collectDuration: 15
   collectBarUI: {fileID: 0}
   collectSound: {fileID: 8300000, guid: 59a5450e389c930428fde33db71b0916, type: 3}
   woodSound: {fileID: 8300000, guid: 01d43487b1b99364a9f1cf4331ba3ad9, type: 3}
@@ -131,3 +131,5 @@ MonoBehaviour:
   isCollecting: 0
   collectRadius: 3
   distanceTolerance: 0.2
+  respawnTime: 20
+  collectAmount: 20

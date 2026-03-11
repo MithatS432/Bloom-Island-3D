@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
 
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
@@ -42,6 +43,12 @@ public class PlayerMovement : MonoBehaviour
     private bool isWaving = false;
     private float waveTimer = 0f;
     [SerializeField] private float waveInterval = 5f;
+
+    public TextMeshProUGUI woodCountText;
+    private int woodCount = 0;
+    public TextMeshProUGUI stoneCountText;
+    private int stoneCount = 0;
+
 
     void Awake()
     {
@@ -304,6 +311,22 @@ public class PlayerMovement : MonoBehaviour
             {
                 collectible.StartCollect(this);
             }
+        }
+    }
+
+    public void UpdateCollectibleUI(Collectible collectibleType, int amount)
+    {
+        if (collectibleType.type == CollectibleType.Wood)
+        {
+            woodCount += amount;
+            if (woodCountText != null)
+                woodCountText.text = woodCount.ToString();
+        }
+        else if (collectibleType.type == CollectibleType.Stone)
+        {
+            stoneCount += amount;
+            if (stoneCountText != null)
+                stoneCountText.text = stoneCount.ToString();
         }
     }
 }
