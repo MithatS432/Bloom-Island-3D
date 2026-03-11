@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public enum CollectibleType { Wood, Stone }
 
@@ -24,52 +25,62 @@ public class Collectible : MonoBehaviour
     [SerializeField] private float collectRadius = 3f;
     [SerializeField] private float distanceTolerance = 0.2f;
 
+    [SerializeField] private float respawnTime = 20f;
+    private Vector3 originalPosition;
+    private Quaternion originalRotation;
+
+    private GameObject meshObject;
+
+    private void Awake()
+    {
+        originalPosition = transform.position;
+        originalRotation = transform.rotation;
+    }
+
     void Start()
     {
-        if (collectBarUI != null && collectBarUI.gameObject != null)
+        if (collectBarUI != null)
         {
             collectBarUI.gameObject.SetActive(false);
+            collectBarUI.fillAmount = 0f;
         }
     }
 
     void Update()
     {
-        if (!isCollecting || player == null) return;
+        if (!isCollecting || player == null)
+            return;
+
+        if (!player.HasStamina())
+        {
+            StopCollecting();
+            return;
+        }
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
 
-        if (distanceToPlayer <= collectRadius + distanceTolerance)
+        if (distanceToPlayer > collectRadius + distanceTolerance)
         {
-            collectTimer = Mathf.Clamp(collectTimer + Time.deltaTime, 0, collectDuration);
-
-            if (collectBarUI != null && collectBarUI.gameObject != null)
-            {
-                if (!collectBarUI.gameObject.activeSelf)
-                    collectBarUI.gameObject.SetActive(true);
-
-                collectBarUI.fillAmount = Mathf.Clamp01(collectTimer / collectDuration);
-            }
-
-            if (Time.time - lastLoopSoundTime >= loopSoundInterval)
-            {
-                PlayLoopSound();
-                lastLoopSoundTime = Time.time;
-            }
-
-            if (collectTimer >= collectDuration)
-            {
-                FinishCollect();
-            }
+            StopCollecting();
+            return;
         }
-        else
-        {
-            isCollecting = false;
-            player = null;
 
-            if (collectBarUI != null && collectBarUI.gameObject != null)
-            {
-                collectBarUI.gameObject.SetActive(false);
-            }
+        collectTimer += Time.deltaTime;
+
+        if (collectBarUI != null)
+        {
+            collectBarUI.fillAmount = Mathf.Clamp01(collectTimer / collectDuration);
+        }
+
+        if (Time.time - lastLoopSoundTime >= loopSoundInterval)
+        {
+            PlayLoopSound();
+            lastLoopSoundTime = Time.time;
+        }
+
+        if (collectTimer >= collectDuration)
+        {
+            FinishCollect();
         }
     }
 
@@ -86,25 +97,43 @@ public class Collectible : MonoBehaviour
 
     public void StartCollect(PlayerMovement playerMovement)
     {
-        if (isCollecting) return;
+        if (isCollecting || !playerMovement.HasStamina())
+            return;
+
         player = playerMovement;
         isCollecting = true;
+        collectTimer = 0f;
 
-        if (collectBarUI != null && collectBarUI.gameObject != null)
+        if (collectBarUI != null)
         {
             collectBarUI.gameObject.SetActive(true);
-            collectBarUI.fillAmount = collectTimer / collectDuration;
+            collectBarUI.fillAmount = 0f;
         }
 
         lastLoopSoundTime = Time.time - loopSoundInterval;
+    }
+
+    void StopCollecting()
+    {
+        isCollecting = false;
+        player = null;
+        collectTimer = 0f;
+
+        if (collectBarUI != null)
+        {
+            collectBarUI.gameObject.SetActive(false);
+            collectBarUI.fillAmount = 0f;
+        }
     }
 
     void FinishCollect()
     {
         isCollecting = false;
 
-        if (collectBarUI != null && collectBarUI.gameObject != null)
+        if (collectBarUI != null)
+        {
             collectBarUI.gameObject.SetActive(false);
+        }
 
         if (collectEffectPrefab != null)
         {
@@ -115,6 +144,40 @@ public class Collectible : MonoBehaviour
         if (player != null && player.audioSource != null && collectSound != null)
             player.audioSource.PlayOneShot(collectSound);
 
-        Destroy(gameObject);
+
+        player = null;
+        collectTimer = 0f;
+
+        StartCoroutine(RespawnRoutine());
+    }
+
+    IEnumerator RespawnRoutine()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+
+        foreach (var r in renderers)
+            r.enabled = false;
+
+        foreach (var c in colliders)
+            c.enabled = false;
+
+        if (collectBarUI != null)
+            collectBarUI.gameObject.SetActive(false);
+
+        yield return new WaitForSeconds(respawnTime);
+
+        transform.position = originalPosition;
+        transform.rotation = originalRotation;
+
+        foreach (var r in renderers)
+            r.enabled = true;
+
+        foreach (var c in colliders)
+            c.enabled = true;
+
+        collectTimer = 0f;
+        isCollecting = false;
+        player = null;
     }
 }

@@ -10522,6 +10522,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2673512910202820501, guid: 27ce25370e5628e4097b7cb95b3a151d, type: 3}
+      propertyPath: respawnTime
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 2673512910202820501, guid: 27ce25370e5628e4097b7cb95b3a151d, type: 3}
       propertyPath: collectBarUI
       value: 
       objectReference: {fileID: 1849718152}

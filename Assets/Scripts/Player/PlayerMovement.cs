@@ -96,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        if (!isWaving && distance <= 0.1f)
+        if (!isWaving && distance <= 0.1f && !IsCollecting())
         {
             waveTimer += Time.deltaTime;
             if (waveTimer >= waveInterval)
@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
                 waveTimer = 0f;
             }
         }
-        else if (distance > 0.1f)
+        else if (distance > 0.1f || IsCollecting())
         {
             waveTimer = 0f;
         }
@@ -138,6 +138,20 @@ public class PlayerMovement : MonoBehaviour
 
         isWaving = false;
     }
+    private bool IsCollecting()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, 3f);
+        foreach (var hit in hits)
+        {
+            Collectible collectible = hit.GetComponent<Collectible>();
+            if (collectible != null && collectible.isCollecting)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     void HandleInput()
     {
         if (!canMove) return;
@@ -215,6 +229,10 @@ public class PlayerMovement : MonoBehaviour
         {
             staminaCount += staminaRecoverRate * Time.deltaTime;
         }
+    }
+    public bool HasStamina()
+    {
+        return staminaCount > 0f && !isFatigued;
     }
     void PlayTiredEffects()
     {
