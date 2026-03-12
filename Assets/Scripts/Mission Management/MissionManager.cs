@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public class MissionManager : MonoBehaviour
 {
     public static MissionManager Instance;
+    [SerializeField] private PlayerMovement player;
 
     [Header("Mission Database")]
     public List<MissionDefinition> missionDatabase;
@@ -19,6 +20,10 @@ public class MissionManager : MonoBehaviour
     [Header("XP")]
     public float maxExp = 100;
     private float currentExp;
+
+    [Header("Mission Complete Effects")]
+    public AudioClip missionCompleteSound;
+    public GameObject missionCompleteEffectPrefab;
 
     void Awake()
     {
@@ -89,6 +94,27 @@ public class MissionManager : MonoBehaviour
         }
 
         UpdateExpUI();
+        PlayMissionCompleteEffects();
         PickRandomMission();
+    }
+    void PlayMissionCompleteEffects()
+    {
+        if (player == null) return;
+
+        if (missionCompleteSound != null)
+        {
+            player.audioSource.PlayOneShot(missionCompleteSound);
+        }
+
+        if (missionCompleteEffectPrefab != null)
+        {
+            GameObject effect = Instantiate(
+                missionCompleteEffectPrefab,
+                player.transform.position,
+                Quaternion.identity
+            );
+
+            Destroy(effect, 2f);
+        }
     }
 }
