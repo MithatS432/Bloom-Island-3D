@@ -83,18 +83,23 @@ public class MissionManager : MonoBehaviour
             CompleteMission();
     }
 
-    void CompleteMission()
+    public void CompleteMission()
     {
         currentExp += activeMission.definition.expReward;
 
         if (currentExp >= maxExp)
         {
             currentExp -= maxExp;
-            Debug.Log("LEVEL UP!");
+            Collectible[] collectibles = Object.FindObjectsByType<Collectible>(FindObjectsSortMode.None);
+            foreach (Collectible c in collectibles)
+            {
+                c.collectDuration = Mathf.Max(1f, c.collectDuration - 1f);
+                c.collectAmount += 5;
+            }
+            PlayMissionCompleteEffects();
         }
 
         UpdateExpUI();
-        PlayMissionCompleteEffects();
         PickRandomMission();
     }
     void PlayMissionCompleteEffects()

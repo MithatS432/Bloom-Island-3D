@@ -29,9 +29,9 @@ public class PlayerMovement : MonoBehaviour
     public float zRange = 49f;
 
     public Image staminaBar;
-    private float maxStamina = 200f;
-    private float staminaCount;
-    [SerializeField] private float staminaDecreaseRate = 10f;
+    public float maxStamina = 200f;
+    public float staminaCount;
+    public float staminaDecreaseRate = 10f;
     [SerializeField] private float staminaRecoverRate = 10f;
     private bool canMove = true;
     public AudioClip tiredSound;
@@ -45,9 +45,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float waveInterval = 5f;
 
     public TextMeshProUGUI woodCountText;
-    private int woodCount = 0;
+    public int woodCount = 0;
     public TextMeshProUGUI stoneCountText;
-    private int stoneCount = 0;
+    public int stoneCount = 0;
 
 
     void Awake()
@@ -219,7 +219,10 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             animator.SetFloat("Speed", 0f);
-            RegenerateStamina();
+            if (!IsCollecting())
+            {
+                RegenerateStamina();
+            }
         }
 
         staminaCount = Mathf.Clamp(staminaCount, 0f, maxStamina);
@@ -230,6 +233,11 @@ public class PlayerMovement : MonoBehaviour
         transform.position = pos;
     }
 
+    public void UpdateStaminaUI()
+    {
+        if (staminaBar != null)
+            staminaBar.fillAmount = staminaCount / maxStamina;
+    }
     void RegenerateStamina()
     {
         if (staminaCount < maxStamina)
@@ -328,5 +336,12 @@ public class PlayerMovement : MonoBehaviour
             if (stoneCountText != null)
                 stoneCountText.text = stoneCount.ToString();
         }
+    }
+    public void RefreshResourceUI()
+    {
+        if (woodCountText != null)
+            woodCountText.text = woodCount.ToString();
+        if (stoneCountText != null)
+            stoneCountText.text = stoneCount.ToString();
     }
 }

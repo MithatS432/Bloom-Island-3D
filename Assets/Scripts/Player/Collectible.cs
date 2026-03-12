@@ -59,7 +59,6 @@ public class Collectible : MonoBehaviour
         }
 
         float distanceToPlayer = Vector3.Distance(transform.position, player.transform.position);
-
         if (distanceToPlayer > collectRadius + distanceTolerance)
         {
             StopCollecting();
@@ -67,6 +66,10 @@ public class Collectible : MonoBehaviour
         }
 
         collectTimer += Time.deltaTime;
+
+        player.staminaCount -= player.staminaDecreaseRate * Time.deltaTime;
+        player.staminaCount = Mathf.Clamp(player.staminaCount, 0f, player.maxStamina);
+        player.UpdateStaminaUI();
 
         if (collectBarUI != null)
         {
@@ -84,7 +87,6 @@ public class Collectible : MonoBehaviour
             FinishCollect();
         }
     }
-
     void PlayLoopSound()
     {
         if (player != null && player.audioSource != null)

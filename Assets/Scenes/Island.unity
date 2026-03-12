@@ -904,7 +904,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 626d27f007e6b944a998d86e93ad1233, type: 2}
   missionText: {fileID: 814436217}
   expBar: {fileID: 1043307354}
-  maxExp: 200
+  maxExp: 100
   missionCompleteSound: {fileID: 8300000, guid: c11fbc1b4ddfa314e8ccf7fcd066e52d, type: 3}
   missionCompleteEffectPrefab: {fileID: 3621047873860463696, guid: fb3b9b0b33d48c64c8c11e01dbe71caa, type: 3}
 --- !u!1001 &118677075
@@ -8168,7 +8168,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 774975492}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1486176800}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: BuyLumber
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &774975492
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11966,7 +11978,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1217629330}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1486176800}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: BuyStoneMine
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1217629330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13198,7 +13222,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1340378989}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1486176800}
+        m_TargetAssemblyTypeName: StoreManager, Assembly-CSharp
+        m_MethodName: BuyHouse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1340378989
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14561,6 +14597,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2434385694337426890, guid: 5d4d4abe7e7de45ed8fa6ff01c8aba81, type: 3}
   m_PrefabInstance: {fileID: 1476498554}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1486176798
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1486176799}
+  - component: {fileID: 1486176800}
+  m_Layer: 0
+  m_Name: Store Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1486176799
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486176798}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.79, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1486176800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486176798}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65923cd5cc7e11046a44615cddf918b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 1190168581}
+  buyHouseButton: {fileID: 1340378988}
+  buyLumberButton: {fileID: 774975491}
+  buyStoneMineButton: {fileID: 1217629329}
+  buySound: {fileID: 8300000, guid: 468c0fb37dbff474ca2c6915987780d9, type: 3}
 --- !u!1 &1502741885
 GameObject:
   m_ObjectHideFlags: 0
@@ -20296,4 +20381,5 @@ SceneRoots:
   - {fileID: 1621919594}
   - {fileID: 1502741886}
   - {fileID: 117339427}
+  - {fileID: 1486176799}
   - {fileID: 88323800}
