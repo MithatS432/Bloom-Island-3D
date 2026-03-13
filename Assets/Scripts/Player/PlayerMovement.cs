@@ -328,6 +328,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // Player gather sources
     public void UpdateCollectibleUI(Collectible collectibleType, int amount)
     {
         if (collectibleType.type == CollectibleType.Wood)
@@ -337,6 +338,23 @@ public class PlayerMovement : MonoBehaviour
                 woodCountText.text = woodCount.ToString();
         }
         else if (collectibleType.type == CollectibleType.Stone)
+        {
+            stoneCount += amount;
+            if (stoneCountText != null)
+                stoneCountText.text = stoneCount.ToString();
+        }
+    }
+
+    //Auto resources
+    public void UpdateCollectibleUI(CollectibleType type, int amount)
+    {
+        if (type == CollectibleType.Wood)
+        {
+            woodCount += amount;
+            if (woodCountText != null)
+                woodCountText.text = woodCount.ToString();
+        }
+        else if (type == CollectibleType.Stone)
         {
             stoneCount += amount;
             if (stoneCountText != null)

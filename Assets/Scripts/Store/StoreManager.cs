@@ -13,6 +13,10 @@ public class StoreManager : MonoBehaviour
     public GameObject lumberPrefab;
     public GameObject stoneMinePrefab;
 
+    public GameObject houseInventoryButton;
+    public GameObject lumberInventoryButton;
+    public GameObject mineInventoryButton;
+
     private int houseWoodCost = 300, houseStoneCost = 300;
     private int lumberWoodCost = 500, lumberStoneCost = 100;
     private int mineWoodCost = 150, mineStoneCost = 450;
@@ -23,7 +27,17 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= houseWoodCost && player.stoneCount >= houseStoneCost)
         {
-            ProcessPurchase(houseWoodCost, houseStoneCost, housePrefab);
+            player.woodCount -= houseWoodCost;
+            player.stoneCount -= houseStoneCost;
+            player.RefreshResourceUI();
+
+            InventoryManager.Instance.UnlockHouse();
+            houseInventoryButton.SetActive(true);
+
+            if (player.audioSource != null && buySound != null)
+                player.audioSource.PlayOneShot(buySound);
+
+            buyHouseButton.interactable = false;
         }
     }
 
@@ -31,7 +45,17 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= lumberWoodCost && player.stoneCount >= lumberStoneCost)
         {
-            ProcessPurchase(lumberWoodCost, lumberStoneCost, lumberPrefab);
+            player.woodCount -= lumberWoodCost;
+            player.stoneCount -= lumberStoneCost;
+            player.RefreshResourceUI();
+
+            InventoryManager.Instance.UnlockLumber();
+            lumberInventoryButton.SetActive(true);
+
+            if (player.audioSource != null && buySound != null)
+                player.audioSource.PlayOneShot(buySound);
+
+            buyLumberButton.interactable = false;
         }
     }
 
@@ -39,28 +63,17 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= mineWoodCost && player.stoneCount >= mineStoneCost)
         {
-            ProcessPurchase(mineWoodCost, mineStoneCost, stoneMinePrefab);
-        }
-    }
+            player.woodCount -= mineWoodCost;
+            player.stoneCount -= mineStoneCost;
+            player.RefreshResourceUI();
 
-    private void ProcessPurchase(int woodCost, int stoneCost, GameObject buildingPrefab)
-    {
-        player.woodCount -= woodCost;
-        player.stoneCount -= stoneCost;
-        player.RefreshResourceUI();
+            InventoryManager.Instance.UnlockMine();
+            mineInventoryButton.SetActive(true);
 
-        if (player.audioSource != null && buySound != null)
-        {
-            player.audioSource.PlayOneShot(buySound);
-        }
+            if (player.audioSource != null && buySound != null)
+                player.audioSource.PlayOneShot(buySound);
 
-        if (buildingPrefab != null && BuildingSystem.Instance != null)
-        {
-            BuildingSystem.Instance.StartBuilding(buildingPrefab);
-        }
-        else
-        {
-            Debug.LogError("BuildingPrefab veya BuildingSystem.Instance null!");
+            buyStoneMineButton.interactable = false;
         }
     }
 }

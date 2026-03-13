@@ -217,7 +217,7 @@ MonoBehaviour:
   tiredSound: {fileID: 8300000, guid: 88e09a39f84db344bb534a837d95aef4, type: 3}
   tiredEffect: {fileID: 362261158077530393, guid: 20fda529c996a334da7fd65b48ea40df, type: 3}
   effectInterval: 3
-  waveInterval: 5
+  waveInterval: 15
   woodCountText: {fileID: 0}
   woodCount: 0
   stoneCountText: {fileID: 0}
