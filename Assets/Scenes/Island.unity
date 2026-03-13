@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 88323797}
   m_Layer: 0
   m_Name: Land
-  m_TagString: Untagged
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4674,6 +4674,7 @@ GameObject:
   - component: {fileID: 438381017}
   - component: {fileID: 438381016}
   - component: {fileID: 438381015}
+  - component: {fileID: 438381018}
   m_Layer: 5
   m_Name: WoodResourceSell
   m_TagString: Untagged
@@ -4782,6 +4783,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 438381013}
   m_CullTransparentMesh: 1
+--- !u!114 &438381018
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 438381013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e3539260ba2bd4582d7affd875f95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingPrefab: {fileID: 8460001735962630117, guid: 2bb81d71f4dbe56419ceea099652cdbf, type: 3}
 --- !u!1001 &452403611
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6962,9 +6976,17 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7168606565907030623, guid: 79d0c604612fad54c934936f094ec850, type: 3}
+      propertyPath: woodCount
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7168606565907030623, guid: 79d0c604612fad54c934936f094ec850, type: 3}
       propertyPath: staminaBar
       value: 
       objectReference: {fileID: 112429741}
+    - target: {fileID: 7168606565907030623, guid: 79d0c604612fad54c934936f094ec850, type: 3}
+      propertyPath: stoneCount
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 7168606565907030623, guid: 79d0c604612fad54c934936f094ec850, type: 3}
       propertyPath: woodCountText
       value: 
@@ -7355,6 +7377,7 @@ GameObject:
   - component: {fileID: 704184323}
   - component: {fileID: 704184322}
   - component: {fileID: 704184321}
+  - component: {fileID: 704184324}
   m_Layer: 5
   m_Name: HouseSell
   m_TagString: Untagged
@@ -7463,6 +7486,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704184319}
   m_CullTransparentMesh: 1
+--- !u!114 &704184324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704184319}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e3539260ba2bd4582d7affd875f95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingPrefab: {fileID: 8181453423359535207, guid: 48d2e97472f3bf84a844879441514e87, type: 3}
 --- !u!1001 &704863087
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10696,6 +10732,7 @@ GameObject:
   - component: {fileID: 1058333782}
   - component: {fileID: 1058333781}
   - component: {fileID: 1058333780}
+  - component: {fileID: 1058333783}
   m_Layer: 5
   m_Name: StoneResourceSell
   m_TagString: Untagged
@@ -10804,6 +10841,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1058333778}
   m_CullTransparentMesh: 1
+--- !u!114 &1058333783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058333778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f6e3539260ba2bd4582d7affd875f95c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buildingPrefab: {fileID: 1295626269311085207, guid: c764b4f57a07b274ba4eeaaef1b55c44, type: 3}
 --- !u!1001 &1079035557
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14645,6 +14695,9 @@ MonoBehaviour:
   buyHouseButton: {fileID: 1340378988}
   buyLumberButton: {fileID: 774975491}
   buyStoneMineButton: {fileID: 1217629329}
+  housePrefab: {fileID: 8181453423359535207, guid: 48d2e97472f3bf84a844879441514e87, type: 3}
+  lumberPrefab: {fileID: 8460001735962630117, guid: 2bb81d71f4dbe56419ceea099652cdbf, type: 3}
+  stoneMinePrefab: {fileID: 1295626269311085207, guid: c764b4f57a07b274ba4eeaaef1b55c44, type: 3}
   buySound: {fileID: 8300000, guid: 468c0fb37dbff474ca2c6915987780d9, type: 3}
 --- !u!1 &1502741885
 GameObject:
@@ -17550,6 +17603,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6101107163663203578, guid: cbc1d3b7475814f20818245d9e54aca9, type: 3}
   m_PrefabInstance: {fileID: 1862481678}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1875564065
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1875564066}
+  - component: {fileID: 1875564067}
+  m_Layer: 0
+  m_Name: Build Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1875564066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875564065}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1875564067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875564065}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb6b4b7e86ab18d499d140ea0cc7342c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentBuilding: {fileID: 0}
+  placedBuildings: []
 --- !u!1001 &1879120648
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20382,4 +20481,5 @@ SceneRoots:
   - {fileID: 1502741886}
   - {fileID: 117339427}
   - {fileID: 1486176799}
+  - {fileID: 1875564066}
   - {fileID: 88323800}

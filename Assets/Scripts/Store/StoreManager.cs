@@ -9,6 +9,10 @@ public class StoreManager : MonoBehaviour
     public Button buyLumberButton;
     public Button buyStoneMineButton;
 
+    public GameObject housePrefab;
+    public GameObject lumberPrefab;
+    public GameObject stoneMinePrefab;
+
     private int houseWoodCost = 300, houseStoneCost = 300;
     private int lumberWoodCost = 500, lumberStoneCost = 100;
     private int mineWoodCost = 150, mineStoneCost = 450;
@@ -19,7 +23,7 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= houseWoodCost && player.stoneCount >= houseStoneCost)
         {
-            ProcessPurchase(houseWoodCost, houseStoneCost, buyHouseButton);
+            ProcessPurchase(houseWoodCost, houseStoneCost, housePrefab);
         }
     }
 
@@ -27,7 +31,7 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= lumberWoodCost && player.stoneCount >= lumberStoneCost)
         {
-            ProcessPurchase(lumberWoodCost, lumberStoneCost, buyLumberButton);
+            ProcessPurchase(lumberWoodCost, lumberStoneCost, lumberPrefab);
         }
     }
 
@@ -35,15 +39,14 @@ public class StoreManager : MonoBehaviour
     {
         if (player.woodCount >= mineWoodCost && player.stoneCount >= mineStoneCost)
         {
-            ProcessPurchase(mineWoodCost, mineStoneCost, buyStoneMineButton);
+            ProcessPurchase(mineWoodCost, mineStoneCost, stoneMinePrefab);
         }
     }
 
-    private void ProcessPurchase(int woodCost, int stoneCost, Button clickedButton)
+    private void ProcessPurchase(int woodCost, int stoneCost, GameObject buildingPrefab)
     {
         player.woodCount -= woodCost;
         player.stoneCount -= stoneCost;
-
         player.RefreshResourceUI();
 
         if (player.audioSource != null && buySound != null)
@@ -51,6 +54,13 @@ public class StoreManager : MonoBehaviour
             player.audioSource.PlayOneShot(buySound);
         }
 
-        clickedButton.interactable = false;
+        if (buildingPrefab != null && BuildingSystem.Instance != null)
+        {
+            BuildingSystem.Instance.StartBuilding(buildingPrefab);
+        }
+        else
+        {
+            Debug.LogError("BuildingPrefab veya BuildingSystem.Instance null!");
+        }
     }
 }

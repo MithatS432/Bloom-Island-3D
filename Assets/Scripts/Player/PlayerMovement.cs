@@ -62,6 +62,7 @@ public class PlayerMovement : MonoBehaviour
     {
         staminaCount = maxStamina;
         InvokeRepeating(nameof(CheckCollectible), 0f, 0.2f);
+        RefreshResourceUI();
     }
 
     void Update()
@@ -162,6 +163,11 @@ public class PlayerMovement : MonoBehaviour
     void HandleInput()
     {
         if (!canMove) return;
+
+        if (BuildingSystem.Instance != null && BuildingSystem.Instance.currentBuilding != null)
+        {
+            return;
+        }
 
         bool inputReceived = false;
         Vector2 screenPos = Vector2.zero;
