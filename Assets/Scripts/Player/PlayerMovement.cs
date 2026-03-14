@@ -63,6 +63,8 @@ public class PlayerMovement : MonoBehaviour
         staminaCount = maxStamina;
         InvokeRepeating(nameof(CheckCollectible), 0f, 0.2f);
         RefreshResourceUI();
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
     }
 
     void Update()
